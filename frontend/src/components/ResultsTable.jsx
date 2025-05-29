@@ -1,11 +1,14 @@
-/* ResultsTable.jsx */
 import React from 'react';
 
 export default function ResultsTable({ data }) {
   const { X, probability, threshold, totalSimulations, stateRows, lastRow } = data;
 
-  // Encabezados de hoyos dinámicos
-  const holeHeaders = Array.from({ length: X }, (_, idx) => `Hoyo ${idx + 1}`);
+  // Construyo encabezados: por cada hoyo, Puntos / 1er Tiro / 2do Tiro
+  const holeHeaders = Array.from({ length: X }, (_, idx) => [
+    `Hoyo ${idx + 1} Puntos`,
+    `Hoyo ${idx + 1} 1er Tiro`,
+    `Hoyo ${idx + 1} 2do Tiro`
+  ]).flat();
 
   return (
     <div className="mt-4 table-responsive">
@@ -17,17 +20,26 @@ export default function ResultsTable({ data }) {
       <table className="table table-striped table-hover align-middle">
         <thead>
           <tr>
-            {['Iter', ...holeHeaders, 'Total', 'Ex', 'Acum', 'Prob'].map(h => (
+            <th>Iter</th>
+            {holeHeaders.map(h => (
               <th key={h}>{h}</th>
             ))}
+            <th>Total</th>
+            <th>Ex</th>
+            <th>Acum</th>
+            <th>Prob</th>
           </tr>
         </thead>
         <tbody>
           {stateRows.map(r => (
             <tr key={r.iteration}>
               <td>{r.iteration}</td>
-              {r.holes.map((score, i) => (
-                <td key={i}>{score}</td>
+              {r.holes.map((hole, i) => (
+                <React.Fragment key={i}>
+                  <td>{hole.score}</td>
+                  <td>{hole.shot1}</td>
+                  <td>{hole.shot2}</td>
+                </React.Fragment>
               ))}
               <td>{r.total}</td>
               <td>{r.ex}</td>
@@ -37,10 +49,12 @@ export default function ResultsTable({ data }) {
           ))}
           <tr className="table-primary">
             <td>{lastRow.iteration}</td>
-            {lastRow.holes.map((score, i) => (
-              <td key={i} className="fw-semibold">
-                {score}
-              </td>
+            {lastRow.holes.map((hole, i) => (
+              <React.Fragment key={i}>
+                <td className="fw-semibold">{hole.score}</td>
+                <td className="fw-semibold">{hole.shot1}</td>
+                <td className="fw-semibold">{hole.shot2}</td>
+              </React.Fragment>
             ))}
             <td className="fw-semibold">{lastRow.total}</td>
             <td className="fw-semibold">{lastRow.ex}</td>

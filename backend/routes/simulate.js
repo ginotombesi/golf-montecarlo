@@ -7,44 +7,52 @@ const router = express.Router();
 router.post('/',
   validateSimulationParams,
   (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
     const { p1, p2, X, N, j, i, umbral, scoreOne = 50, scoreTwo = 25 } = req.body;
     let acum = 0;
     const stateRows = [];
     let lastRow = null;
 
+    // Etiquetas para los disparos
+    const labels1 = ['>3m', '3-1m', '1-0m', 'emboca'];
+
     for (let k = 1; k <= N; k++) {
       let total = 0;
-      const holes = [];  // Nuevo: registro por hoyo
+      const holes = [];
 
-      // Simulo X hoyos
       for (let h = 0; h < X; h++) {
+        // Primer disparo
         const r = Math.random();
         let cumul = 0, cat = 0;
         for (let idx = 0; idx < p1.length; idx++) {
           cumul += p1[idx];
           if (r < cumul) { cat = idx; break; }
         }
+        const shot1 = labels1[cat];
 
-        let score = 0;
+        // Segundo disparo (solo si no embocó de una)
+        let shot2;
         if (cat === p1.length - 1) {
+          shot2 = '-';
+        } else {
+          shot2 = Math.random() < p2[cat] ? 'emboca' : 'falla';
+        }
+
+        // Cálculo de puntaje
+        let score = 0;
+        if (shot1 === 'emboca') {
           score = scoreOne;
-        } else if (Math.random() < p2[cat]) {
+        } else if (shot2 === 'emboca') {
           score = scoreTwo;
         }
         total += score;
-        holes.push(score);  // Almaceno puntaje del hoyo
+
+        holes.push({ shot1, shot2, score });
       }
 
       const ex = total > umbral ? 1 : 0;
       acum += ex;
       const prob = acumulado => parseFloat((acumulado / k).toFixed(4));
 
-      // Guardo filas j…j+i-1 y la última
       if ((k >= j && k <= j + i - 1) || k === N) {
         const row = { iteration: k, holes, total, ex, acum, prob: prob(acum) };
         if (k === N) lastRow = row;
@@ -53,7 +61,7 @@ router.post('/',
     }
 
     res.json({
-      X,  // Nuevo: número de hoyos para el front-end
+      X,
       probability: parseFloat((acum / N).toFixed(4)),
       totalSimulations: N,
       threshold: umbral,
