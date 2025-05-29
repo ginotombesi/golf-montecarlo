@@ -1,7 +1,11 @@
+/* ResultsTable.jsx */
 import React from 'react';
 
 export default function ResultsTable({ data }) {
-  const { probability, threshold, totalSimulations, stateRows, lastRow } = data;
+  const { X, probability, threshold, totalSimulations, stateRows, lastRow } = data;
+
+  // Encabezados de hoyos dinámicos
+  const holeHeaders = Array.from({ length: X }, (_, idx) => `Hoyo ${idx + 1}`);
 
   return (
     <div className="mt-4 table-responsive">
@@ -13,7 +17,7 @@ export default function ResultsTable({ data }) {
       <table className="table table-striped table-hover align-middle">
         <thead>
           <tr>
-            {['Iter', 'Total', 'Ex', 'Acum', 'Prob'].map(h => (
+            {['Iter', ...holeHeaders, 'Total', 'Ex', 'Acum', 'Prob'].map(h => (
               <th key={h}>{h}</th>
             ))}
           </tr>
@@ -22,6 +26,9 @@ export default function ResultsTable({ data }) {
           {stateRows.map(r => (
             <tr key={r.iteration}>
               <td>{r.iteration}</td>
+              {r.holes.map((score, i) => (
+                <td key={i}>{score}</td>
+              ))}
               <td>{r.total}</td>
               <td>{r.ex}</td>
               <td>{r.acum}</td>
@@ -29,11 +36,16 @@ export default function ResultsTable({ data }) {
             </tr>
           ))}
           <tr className="table-primary">
-            {[lastRow.iteration, lastRow.total, lastRow.ex, lastRow.acum, lastRow.prob].map((v, i) => (
+            <td>{lastRow.iteration}</td>
+            {lastRow.holes.map((score, i) => (
               <td key={i} className="fw-semibold">
-                {v}
+                {score}
               </td>
             ))}
+            <td className="fw-semibold">{lastRow.total}</td>
+            <td className="fw-semibold">{lastRow.ex}</td>
+            <td className="fw-semibold">{lastRow.acum}</td>
+            <td className="fw-semibold">{lastRow.prob}</td>
           </tr>
         </tbody>
       </table>
