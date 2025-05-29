@@ -14,11 +14,12 @@ router.post('/',
 
     // Etiquetas para los disparos
     const labels1 = ['>3m', '3-1m', '1-0m', 'emboca'];
-
+    
+    // For para las rondas 
     for (let k = 1; k <= N; k++) {
       let total = 0;
       const holes = [];
-
+      // For para los hoyos
       for (let h = 0; h < X; h++) {
         // Primer disparo
         const r = Math.random();
