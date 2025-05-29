@@ -8,6 +8,8 @@ export default function SimulationForm({ onResult }) {
   const [N, setN] = useState(1000);
   const [j, setJ] = useState(1);
   const [i, setI] = useState(5);
+  const [scoreOne, setScoreOne] = useState(50);
+  const [scoreTwo, setScoreTwo] = useState(25);
   const [umbral, setUmbral] = useState(125);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +22,11 @@ export default function SimulationForm({ onResult }) {
     if (Math.abs(p1.reduce((a, b) => a + b, 0) - 1) > 1e-6)
       errs.push('La suma de p1 debe ser 1');
     if (j + i - 1 > N) errs.push('j + i - 1 debe ser ≤ N');
-    [X, N, j, i, umbral].forEach(v => {
+    if (X < 1) errs.push('Número de hoyos (X) debe ser ≥ 1');
+    if (N < 1) errs.push('Número de simulaciones (N) debe ser ≥ 1');
+    if (j < 1) errs.push('Desde iteración j debe ser ≥ 1');
+    if (i < 1) errs.push('Cantidad (i) debe ser ≥ 1');
+    [X, N, j, i, scoreOne, scoreTwo, umbral].forEach(v => {
       if (!Number.isInteger(v) || v < 0)
         errs.push('Campos numéricos deben ser enteros ≥ 0');
     });
@@ -37,7 +43,7 @@ export default function SimulationForm({ onResult }) {
     setErrors([]);
     setLoading(true);
     try {
-      const result = await simulate({ p1, p2, X, N, j, i, umbral });
+      const result = await simulate({ p1, p2, X, N, j, i, umbral, scoreOne, scoreTwo });
       onResult(result);
     } catch (err) {
       setErrors(err.errors?.map(x => x.msg) || ['Error inesperado']);
@@ -93,6 +99,8 @@ export default function SimulationForm({ onResult }) {
         ['Número de simulaciones (N)', N, v => setN(+v)],
         ['Desde iteración j', j, v => setJ(+v)],
         ['Cantidad (i)', i, v => setI(+v)],
+        ['Puntaje primer golpe', scoreOne, v => setScoreOne(+v)],
+        ['Puntaje segundo golpe', scoreTwo, v => setScoreTwo(+v)],
         ['Umbral', umbral, v => setUmbral(+v)]
       ].map(([label, value, fn], idx) => (
         <div key={idx} className="col-md-4">
@@ -101,7 +109,10 @@ export default function SimulationForm({ onResult }) {
             type="number"
             value={value}
             className="form-control"
-            onChange={e => fn(e.target.value)}
+            onChange={e => {
+              const v = parseInt(e.target.value, 10);
+              fn(v);
+            }}
           />
         </div>
       ))}

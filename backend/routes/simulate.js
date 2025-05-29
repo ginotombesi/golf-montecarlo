@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/',
   validateSimulationParams,
   (req, res) => {
-    const { p1, p2, X, N, j, i, umbral, scoreOne = 50, scoreTwo = 25 } = req.body;
+    const { p1, p2, X, N, j, i, umbral, scoreOne, scoreTwo } = req.body;
     let acum = 0;
     const stateRows = [];
     let lastRow = null;
@@ -23,14 +23,17 @@ router.post('/',
         // Primer disparo
         const r = Math.random();
         let cumul = 0, cat = 0;
+        // Recorremos las probabilidades cargadas, las acumulamos y determinamos a qué categoría pertenece el golpe
         for (let idx = 0; idx < p1.length; idx++) {
           cumul += p1[idx];
           if (r < cumul) { cat = idx; break; }
         }
+        // Asignamos el resultado del primer disparo
         const shot1 = labels1[cat];
 
         // Segundo disparo (solo si no embocó de una)
         let shot2;
+        // si la categoría del primer golpe es 'emboca' (cat===3), no hay segundo golpe
         if (cat === p1.length - 1) {
           shot2 = '-';
         } else {
@@ -45,15 +48,18 @@ router.post('/',
           score = scoreTwo;
         }
         total += score;
-
+        // Guardamos el hoyo con sus disparos y puntaje
         holes.push({ shot1, shot2, score });
       }
-
+      // Cálculo del éxito (Si el total de puntaje es mayor al umbral, se considera un éxito)
       const ex = total > umbral ? 1 : 0;
       acum += ex;
+      // Cálculo de la probabilidad de la ronda
       const prob = acumulado => parseFloat((acumulado / k).toFixed(4));
 
+      // Mostrar el vector estado si corresponde si el número de ronda es >= j y < j + i o si es la última ronda (N)
       if ((k >= j && k <= j + i - 1) || k === N) {
+        // armamos el vector estado
         const row = { iteration: k, holes, total, ex, acum, prob: prob(acum) };
         if (k === N) lastRow = row;
         else stateRows.push(row);
