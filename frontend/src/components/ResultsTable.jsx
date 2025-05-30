@@ -6,6 +6,7 @@ export default function ResultsTable({ data }) {
 
   // Construyo encabezados: por cada hoyo, Puntos / 1er Tiro / 2do Tiro
   const holeHeaders = Array.from({ length: X }, (_, idx) => [
+    `RND Hoyo ${idx + 1} 1er Tiro`,
     `Hoyo ${idx + 1} 1er Tiro`,
     `Hoyo ${idx + 1} 2do Tiro`,
     `Hoyo ${idx + 1} Puntos`
@@ -38,6 +39,7 @@ export default function ResultsTable({ data }) {
               <td>{r.iteration}</td>
               {r.holes.map((hole, i) => (
                 <React.Fragment key={i}>
+                  <td>{hole.rTrunc}</td>
                   <td>{hole.shot1}</td>
                   <td>{hole.shot2}</td>
                   <td>{hole.score}</td>
@@ -53,6 +55,7 @@ export default function ResultsTable({ data }) {
             <td>{lastRow.iteration}</td>
             {lastRow.holes.map((hole, i) => (
               <React.Fragment key={i}>
+                <td className="fw-semibold">{hole.rTrunc}</td>
                 <td className="fw-semibold">{hole.shot1}</td>
                 <td className="fw-semibold">{hole.shot2}</td>
                 <td className="fw-semibold">{hole.score}</td>

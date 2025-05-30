@@ -51,8 +51,9 @@ router.post('/',
           score = scoreTwo;
         }
         total += score; // Acumula puntaje en la ronda
+        rTrunc = parseFloat(r).toFixed(2);
         // Guardamos el hoyo con sus disparos y puntaje
-        holes.push({ shot1, shot2, score });
+        holes.push({ shot1, shot2, score, rTrunc });
       }
       
       // Cálculo del éxito (Si el total de puntaje es mayor al umbral, se considera un éxito)
