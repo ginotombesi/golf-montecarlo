@@ -24,6 +24,7 @@ router.post('/',
       for (let h = 0; h < X; h++) {
         // Primer disparo
         const r = Math.random(); // generamos el random
+        let r2 = 0;
         let cumul = 0, cat = 0; // variables para el acumulador y categoria
 
         // Recorremos las probabilidades cargadas, las acumulamos y determinamos a qué categoría pertenece el golpe
@@ -53,7 +54,7 @@ router.post('/',
         }
         total += score; // Acumula puntaje en la ronda
         rTrunc = parseFloat(r).toFixed(2);
-        r2Trunc = parseFloat(r).toFixed(2);
+        r2Trunc = parseFloat(r2).toFixed(2);
         // Guardamos el hoyo con sus disparos y puntaje
         holes.push({ shot1, shot2, score, rTrunc, r2Trunc });
       }

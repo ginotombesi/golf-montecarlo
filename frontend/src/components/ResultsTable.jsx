@@ -42,7 +42,7 @@ export default function ResultsTable({ data }) {
                 <React.Fragment key={i}>
                   <td>{hole.rTrunc}</td>
                   <td>{hole.shot1}</td>
-                  <td>{hole.r2Trunc}</td>
+                  <td>{(hole.r2Trunc == 0) ? "-": hole.r2Trunc}</td>
                   <td>{hole.shot2}</td>
                   <td>{hole.score}</td>
                 </React.Fragment>
@@ -59,7 +59,7 @@ export default function ResultsTable({ data }) {
               <React.Fragment key={i}>
                 <td className="fw-semibold">{hole.rTrunc}</td>
                 <td className="fw-semibold">{hole.shot1}</td>
-                <td className="fw-semibold">{hole.r2Trunc}</td>
+                <td>{(hole.r2Trunc == 0) ? "-": hole.r2Trunc}</td>
                 <td className="fw-semibold">{hole.shot2}</td>
                 <td className="fw-semibold">{hole.score}</td>
               </React.Fragment>
