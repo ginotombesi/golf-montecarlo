@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/',
   validateSimulationParams,
   (req, res) => {
-    const { p1, p2, X, N, j, i, umbral, scoreOne = 50, scoreTwo = 25 } = req.body;
+    const { p1, p2, X, N, j, i, umbral, scoreOne, scoreTwo} = req.body;
     let acum = 0;
     const stateRows = [];
     let lastRow = null;

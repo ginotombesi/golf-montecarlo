@@ -14,6 +14,8 @@ const validateSimulationParams = [
   body('N').isInt({ min: 1 }).withMessage('N debe ser entero positivo'),
   body('j').isInt({ min: 1 }).withMessage('j debe ser entero positivo'),
   body('i').isInt({ min: 1 }).withMessage('i debe ser entero positivo'),
+  body('scoreOne').isInt({ min: 1 }).withMessage('el puntaje 1 debe ser entero positivo'),
+  body('scoreTwo').isInt({ min: 1 }).withMessage('el puntaje 2 debe ser entero positivo'),
   body('umbral').isInt({ min: 0 }).withMessage('umbral debe ser entero ≥ 0'),
   body().custom(({ j, i, N }) => {
     if (j + i - 1 > N) throw new Error('j + i - 1 debe ser ≤ N');
