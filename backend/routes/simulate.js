@@ -40,7 +40,8 @@ router.post('/',
         if (cat === p1.length - 1) {
           shot2 = '-'; // marcador vacio
         } else {
-          shot2 = Math.random() < p2[cat] ? 'emboca' : 'falla';
+          r2 = Math.random()
+          shot2 = r2 < p2[cat] ? 'emboca' : 'falla';
         } // con probabilidad p2[cat] emboca, si no falla
 
         // Cálculo de puntaje
@@ -52,8 +53,9 @@ router.post('/',
         }
         total += score; // Acumula puntaje en la ronda
         rTrunc = parseFloat(r).toFixed(2);
+        r2Trunc = parseFloat(r).toFixed(2);
         // Guardamos el hoyo con sus disparos y puntaje
-        holes.push({ shot1, shot2, score, rTrunc });
+        holes.push({ shot1, shot2, score, rTrunc, r2Trunc });
       }
       
       // Cálculo del éxito (Si el total de puntaje es mayor al umbral, se considera un éxito)
