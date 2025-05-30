@@ -25,10 +25,11 @@ export default function SimulationForm({ onResult }) {
       errs.push('Los valores de p1 y p2 deben estar entre 0 y 1');
 
     if (j + i - 1 > N) errs.push('j + i - 1 debe ser ≤ N');
-    if (X < 1) errs.push('Número de hoyos (X) debe ser ≥ 1');
-    if (N < 1) errs.push('Número de simulaciones (N) debe ser ≥ 1');
+    if (X < 1 || X > 1000) errs.push('Número de hoyos (X) debe ser ≥ 1 y ≤ 1000');
+    if (N < 1 || N > 5000000) errs.push('Número de simulaciones (N) debe ser ≥ 1');
     if (j < 1) errs.push('Desde iteración j debe ser ≥ 1');
     if (i < 1) errs.push('Cantidad (i) debe ser ≥ 1');
+    if (scoreTwo > 1000000 || scoreOne > 1000000 ) errs.push('Los puntajes deben ser ≤ 1000000');
     [X, N, j, i, scoreOne, scoreTwo, umbral].forEach(v => {
       if (!Number.isInteger(v) || v < 0)
         errs.push('Campos numéricos deben ser enteros ≥ 0');
