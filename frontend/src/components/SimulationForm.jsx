@@ -21,6 +21,9 @@ export default function SimulationForm({ onResult }) {
     const errs = [];
     if (Math.abs(p1.reduce((a, b) => a + b, 0) - 1) > 1e-6)
       errs.push('La suma de p1 debe ser 1');
+    if ((p2.some(v => v < 0 || v > 1)) || p1.some(v => v < 0 || v > 1))
+      errs.push('Los valores de p1 y p2 deben estar entre 0 y 1');
+
     if (j + i - 1 > N) errs.push('j + i - 1 debe ser ≤ N');
     if (X < 1) errs.push('Número de hoyos (X) debe ser ≥ 1');
     if (N < 1) errs.push('Número de simulaciones (N) debe ser ≥ 1');
