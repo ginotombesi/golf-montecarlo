@@ -12,14 +12,14 @@ export default function App() {
       <motion.div
         as={Card}
         className="mx-auto shadow-sm"
-        style={{ maxWidth: 800 }}
+        style={{ maxWidth: 2000 }}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
         <Card.Body>
           <Card.Title className="mb-4 text-primary">
-            Golf Recreativo Simulator
+            Simulador de golf
           </Card.Title>
           <SimulationForm onResult={setResult} />
           {result && <ResultsTable data={result} />}

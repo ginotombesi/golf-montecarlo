@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { simulate } from '../api';
+import { simulate } from '../api'; // llamamos al back
 
 export default function SimulationForm({ onResult }) {
+  // le damos estados iniciales a los parametros
   const [p1, setP1] = useState([0.4, 0.25, 0.2, 0.15]);
   const [p2, setP2] = useState([0.1, 0.24, 0.43]);
   const [X, setX] = useState(10);
@@ -14,8 +15,9 @@ export default function SimulationForm({ onResult }) {
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const labels1 = ['>3m', '3-1m', '1-0m', 'emboca'];
-  const labels2 = ['>3m', '3-1m', '1-0m'];
+  // etiquetas para mostrar al usuario junto a los inputs
+  const labels1 = ['Probabilidad de dejarla a >3m', 'Probabilidad de dejarla entre 3-1m', 'Probabilidad de dejarla entre 1-0m', 'Probabilidad de embocarla'];
+  const labels2 = ['Probabilidad de embocarla si quedo a >3m', 'Probabilidad de embocarla si quedo a 3-1m', 'Probabilidad de embocarla si quedo a 1-0m'];
 
   const validate = () => {
     const errs = [];
@@ -26,7 +28,7 @@ export default function SimulationForm({ onResult }) {
 
     if (j + i - 1 > N) errs.push('j + i - 1 debe ser ≤ N');
     if (X < 1 || X > 1000) errs.push('Número de hoyos (X) debe ser ≥ 1 y ≤ 1000');
-    if (N < 1 || N > 5000000) errs.push('Número de simulaciones (N) debe ser ≥ 1');
+    if (N < 1 || N > 5000000) errs.push('Número de simulaciones (N) debe ser ≥ 1 y ≤ 5000000 ');
     if (j < 1) errs.push('Desde iteración j debe ser ≥ 1');
     if (i < 1) errs.push('Cantidad (i) debe ser ≥ 1');
     if (scoreTwo > 1000000 || scoreOne > 1000000 ) errs.push('Los puntajes deben ser ≤ 1000000');
@@ -37,19 +39,22 @@ export default function SimulationForm({ onResult }) {
     return errs;
   };
 
+  // una vez que se envia el formulario 
   const handleSubmit = async e => {
     e.preventDefault();
     const errs = validate();
     if (errs.length) {
-      setErrors(errs);
+      setErrors(errs);  // mostramos los errores y lo frenamos
       return;
     }
     setErrors([]);
     setLoading(true);
     try {
+      // llamamos a la api y traemos los resultados traidos del back
       const result = await simulate({ p1, p2, X, N, j, i, umbral, scoreOne, scoreTwo });
       onResult(result);
     } catch (err) {
+      // si hay algun error lo mostramos
       setErrors(err.errors?.map(x => x.msg) || ['Error inesperado']);
     } finally {
       setLoading(false);

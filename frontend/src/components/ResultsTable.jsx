@@ -1,6 +1,7 @@
 import React from 'react';
 
 export default function ResultsTable({ data }) {
+  // obtenemos toda la info que llego del backend
   const { X, probability, threshold, totalSimulations, stateRows, lastRow } = data;
 
   // Construyo encabezados: por cada hoyo, Puntos / 1er Tiro / 2do Tiro
@@ -31,6 +32,7 @@ export default function ResultsTable({ data }) {
           </tr>
         </thead>
         <tbody>
+          {/* Filas intermedias */}
           {stateRows.map(r => (
             <tr key={r.iteration}>
               <td>{r.iteration}</td>
